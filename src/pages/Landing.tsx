@@ -39,7 +39,7 @@ export default function Landing() {
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b border-white/50 bg-white/40 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-          <div className="flex items-center gap-2.5">
+          <button onClick={() => navigate("/")} className="flex cursor-pointer items-center gap-2.5">
             <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/30">
               <Warehouse className="size-5" />
             </div>
@@ -47,7 +47,7 @@ export default function Landing() {
               <p className="text-sm font-bold tracking-tight text-slate-900">SmartFulfill AI</p>
               <p className="text-[10px] font-medium text-muted-foreground">Warehouse operations platform</p>
             </div>
-          </div>
+          </button>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="hidden text-slate-600 sm:inline-flex" onClick={() => navigate("/auth")}>
               Sign in

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -48,6 +48,7 @@ import {
   History,
   LayoutDashboard,
   LogOut,
+  Menu,
   PackageCheck,
   PackageSearch,
   Play,
@@ -397,8 +398,74 @@ function ProfileMenu() {
   );
 }
 
+function SidebarContent({
+  collapsed,
+  sections,
+  warehouseName,
+  onNavigate,
+  footer,
+}: {
+  collapsed: boolean;
+  sections: [string, NavItem[]][];
+  warehouseName?: string;
+  onNavigate?: () => void;
+  footer?: ReactNode;
+}) {
+  return (
+    <>
+      <NavLink to="/dashboard" onClick={onNavigate} className="flex items-center gap-2.5 px-4 py-5">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/30">
+          <Warehouse className="size-5" />
+        </div>
+        {!collapsed && (
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold tracking-tight text-slate-900">SmartFulfill AI</p>
+            <p className="truncate text-[10px] font-medium text-muted-foreground">{warehouseName ?? "Fulfilment Hub"}</p>
+          </div>
+        )}
+      </NavLink>
+
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 pb-4 pt-1">
+        {sections.map(([section, items]) => (
+          <div key={section}>
+            {!collapsed && <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{section}</p>}
+            <div className="space-y-0.5">
+              {items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    onClick={onNavigate}
+                    className={({ isActive }) =>
+                      cn(
+                        "group flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-[13px] font-medium transition-all",
+                        collapsed && "justify-center px-0",
+                        isActive
+                          ? "bg-white/80 text-sky-700 shadow-sm ring-1 ring-white/80"
+                          : "text-slate-600 hover:bg-white/55 hover:text-slate-900",
+                      )
+                    }
+                    title={item.label}
+                  >
+                    <Icon className={cn("size-4 shrink-0", collapsed && "size-5")} />
+                    {!collapsed && <span className="truncate">{item.label}</span>}
+                  </NavLink>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </nav>
+
+      {footer}
+    </>
+  );
+}
+
 export default function AppShell() {
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [zone, setZone] = useState("Zone A");
   const { user } = useAuth();
   const myRole = (useQuery(api.queries.myRole) as Role | undefined) ?? "manager";
@@ -444,67 +511,62 @@ export default function AppShell() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <aside className={cn("glass-nav relative z-20 flex shrink-0 flex-col transition-all duration-300", collapsed ? "w-[72px]" : "w-64")}>
-        <div className="flex items-center gap-2.5 px-4 py-5">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/30">
-            <Warehouse className="size-5" />
-          </div>
-          {!collapsed && (
-            <div className="min-w-0">
-              <p className="truncate text-sm font-bold tracking-tight text-slate-900">SmartFulfill AI</p>
-              <p className="truncate text-[10px] font-medium text-muted-foreground">{meta?.settings?.warehouseName ?? "Fulfilment Hub"}</p>
+      {/* Desktop sidebar */}
+      <aside className={cn("glass-nav relative z-20 hidden shrink-0 flex-col transition-all duration-300 lg:flex", collapsed ? "w-[72px]" : "w-64")}>
+        <SidebarContent
+          collapsed={collapsed}
+          sections={sections}
+          warehouseName={meta?.settings?.warehouseName}
+          footer={
+            <div className="border-t border-white/50 p-3">
+              <button
+                onClick={() => setCollapsed((c) => !c)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-500 transition-colors hover:bg-white/60 hover:text-slate-800"
+              >
+                <ChevronsLeft className={cn("size-4 transition-transform duration-300", collapsed && "rotate-180")} />
+                {!collapsed && "Collapse"}
+              </button>
             </div>
-          )}
-        </div>
-
-        <nav className="flex-1 space-y-5 overflow-y-auto px-3 pb-4 pt-1">
-          {sections.map(([section, items]) => (
-            <div key={section}>
-              {!collapsed && <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{section}</p>}
-              <div className="space-y-0.5">
-                {items.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      className={({ isActive }) =>
-                        cn(
-                          "group flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-[13px] font-medium transition-all",
-                          collapsed && "justify-center px-0",
-                          isActive
-                            ? "bg-white/80 text-sky-700 shadow-sm ring-1 ring-white/80"
-                            : "text-slate-600 hover:bg-white/55 hover:text-slate-900",
-                        )
-                      }
-                      title={item.label}
-                    >
-                      <Icon className={cn("size-4 shrink-0", collapsed && "size-5")} />
-                      {!collapsed && <span className="truncate">{item.label}</span>}
-                    </NavLink>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </nav>
-
-        <div className="border-t border-white/50 p-3">
-          <button
-            onClick={() => setCollapsed((c) => !c)}
-            className="flex w-full items-center justify-center gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-500 transition-colors hover:bg-white/60 hover:text-slate-800"
-          >
-            <ChevronsLeft className={cn("size-4 transition-transform duration-300", collapsed && "rotate-180")} />
-            {!collapsed && "Collapse"}
-          </button>
-        </div>
+          }
+        />
       </aside>
+
+      {/* Mobile sidebar drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <aside className="glass-nav absolute inset-y-0 left-0 flex w-[280px] max-w-[85vw] flex-col shadow-2xl">
+            <SidebarContent
+              collapsed={false}
+              sections={sections}
+              warehouseName={meta?.settings?.warehouseName}
+              onNavigate={() => setMobileOpen(false)}
+              footer={
+                <div className="border-t border-white/50 p-3">
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-500 transition-colors hover:bg-white/60 hover:text-slate-800"
+                  >
+                    <X className="size-4" /> Close
+                  </button>
+                </div>
+              }
+            />
+          </aside>
+        </div>
+      )}
 
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Topbar */}
         <header className="glass-nav flex h-16 shrink-0 items-center gap-3 border-b border-white/50 px-4 sm:px-6">
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="glass-chip flex size-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:text-slate-800 lg:hidden"
+            aria-label="Open navigation"
+          >
+            <Menu className="size-4" />
+          </button>
           <GlobalSearch />
           <div className="flex-1" />
           <DemoModeDialog />
