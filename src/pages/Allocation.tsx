@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Link } from "react-router";
 import { toast } from "sonner";
-import { PageHeader, GlassPanel, SectionTitle, PriorityBadge, LoadingBlock, EmptyState, SeverityDot } from "@/components/ui-parts";
+import { PageHeader, GlassPanel, SectionTitle, PriorityBadge, LoadingBlock, EmptyState } from "@/components/ui-parts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";

@@ -19,7 +19,7 @@ import {
   EmptyState,
 } from "@/components/ui-parts";
 import { Button } from "@/components/ui/button";
-import { timeAgo, fmtDuration } from "@/lib/format";
+import { timeAgo } from "@/lib/format";
 import {
   Activity,
   AlertTriangle,

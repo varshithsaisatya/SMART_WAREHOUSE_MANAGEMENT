@@ -6,9 +6,8 @@ import { toast } from "sonner";
 import { PageHeader, GlassPanel, SectionTitle, PriorityBadge, TaskStatusBadge, SlaChip, LoadingBlock, EmptyState, LiveDot } from "@/components/ui-parts";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PackageSearch, Play, CheckCircle2, Layers, MapPin, Timer, UserCheck, Sparkles, ArrowRight } from "lucide-react";
+import { PackageSearch, Play, CheckCircle2, Layers, MapPin, Timer, UserCheck, Sparkles } from "lucide-react";
 import { fmtDuration, timeAgo } from "@/lib/format";
-import { cn } from "@/lib/utils";
 
 const PICKERS = ["Priya N.", "Ravi K.", "Sameer J.", "Anita D.", "Kiran P.", "Deepa M.", "Manoj S.", "Neha R."];
 

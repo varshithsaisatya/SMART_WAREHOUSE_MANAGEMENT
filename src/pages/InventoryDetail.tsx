@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { GlassPanel, PageHeader, SectionTitle, InvStatusBadge, RiskBadge, LoadingBlock, EmptyState, SeverityDot } from "@/components/ui-parts";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Boxes, CalendarClock, PackagePlus, Sparkles, TrendingUp, Warehouse } from "lucide-react";
+import { ArrowLeft, Boxes, PackagePlus, Sparkles, TrendingUp, Warehouse } from "lucide-react";
 import { timeAgo, dateShort, inr, fmtDuration } from "@/lib/format";
 import { cn } from "@/lib/utils";
 

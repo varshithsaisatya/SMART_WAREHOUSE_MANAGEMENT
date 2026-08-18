@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Link } from "react-router";
 import { toast } from "sonner";
-import { PageHeader, GlassPanel, SectionTitle, ExcTypeBadge, ExcStatusBadge, SeverityDot, LoadingBlock, EmptyState } from "@/components/ui-parts";
+import { PageHeader, GlassPanel, ExcTypeBadge, ExcStatusBadge, SeverityDot, LoadingBlock, EmptyState } from "@/components/ui-parts";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertTriangle, ArrowDown, CheckCircle2, ChevronUp, Lightbulb, Siren, UserRound } from "lucide-react";
